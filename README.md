@@ -1,1 +1,3 @@
 # NODEboilerplate
+
+npm start
