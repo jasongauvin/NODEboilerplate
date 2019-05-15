@@ -25,6 +25,10 @@ Configuration du serveur
     server.set( 'views', __dirname + '/www' );
     server.use( express.static(path.join(__dirname, 'www')) );
 
+    // Configuration de body-parser
+    server.use(bodyParser.json({limit: '10mb'}));
+    server.use(bodyParser.urlencoded({ extended: true }));
+
     // Utilisation des routers
     server.use('/api', apiRouter);
     server.use('/', frontRouter);
