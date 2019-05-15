@@ -54,8 +54,6 @@ router.post('/article', (req, res) => {
             res.json({ msg: 'No data', data: null })
         }
     //
-
-
     
 });
 
