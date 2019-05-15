@@ -5,6 +5,8 @@ Importer les composants serveur
     require('dotenv').config();
     const express = require('express');
     const path = require('path');
+    const bodyParser = require('body-parser');
+
 
     // Inner (notre appli)
     const frontRouter = require('./routes/front.router');
