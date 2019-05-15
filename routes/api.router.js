@@ -36,15 +36,15 @@ router.post('/article', (req, res) => {
             req.body.title.length > 0 &&
             req.body.content.length > 0
          ){
-             // Définir l'item
-            const newItem = { title: req.body.title, content: req.body.content};
+            // Définir l'item
+            const newItem = { title: req.body.title, content : req.body.content };
 
             // Enregistrer l'item
             connexion.query(`INSERT INTO post SET ?`, newItem, (err, result, fields) => {
                 if( err ){
-                    res.json({ msg: 'Connection fail', data: err })
+                    res.json({ msg: 'Connection failed', data: err })
                 }
-                else {
+                else{
                     res.json({ msg: 'Create Article', data: result })
                 }
             })
@@ -55,13 +55,15 @@ router.post('/article', (req, res) => {
         }
     //
 
+
+    
 });
 
 // Read all Items: GET
 router.get('/article', (req, res) => {
 
     // Récupérer des données SQL
-    connection.query('SELECT * FROM post', (error, results, fields) => {
+    connexion.query('SELECT * FROM post', (error, results, fields) => {
         if (error) {
             res.json({ msg: 'Error get all', err: error })
         }
@@ -74,12 +76,12 @@ router.get('/article', (req, res) => {
 
 // Read one Item: GET
 router.get('/article/:id', (req, res) => {
-
+    
     // Récupérer le paramêtre d'une route
     const routeParam = req.params.id;
 
     // Récupérer des données SQL
-    connection.query(`SELECT * FROM post WHERE _id = ${routeParam}`, (error, results, fields) => {
+    connexion.query(`SELECT * FROM post WHERE _id = ${routeParam}`, (error, results, fields) => {
         if (error) {
             res.json({ msg: 'Error get one', err: error })
         }
@@ -93,19 +95,50 @@ router.get('/article/:id', (req, res) => {
 // Update one Item: PUT
 router.put('/article/:id', (req, res) => {
 
+    // Récupérer le paramêtre d'une route
+    const routeParam = req.params.id;
+
     /* 
-        Pour éditer un article il faut une valeur pour :
-        - title
-        - content
+    Pour éditer un article il faut une valeur pour :
+    - title
+    - content
     */
+        if( 
+            req.body &&
+            req.body.title.length > 0 &&
+            req.body.content.length > 0
+        ){
+            // Modifier des données SQL
+            connexion.query(`UPDATE post  SET title = ?, content = ?  WHERE _id = ${routeParam}`, [req.body.title, req.body.content] , (error, results, fields) => {
+                if (error) {
+                    res.json({ msg: 'Error update', err: error })
+                }
+                else{
+                    res.json({ msg: 'Update', data: results })
+                }
+            });
 
-
-    res.json({ msg: 'Update one Article' })
+        }
+        else{
+            res.json({ msg: 'No data', data: null })
+        };
+    //
 });
 
 // Delete one Item: DELETE
 router.delete('/article/:id', (req, res) => {
-    res.json({ msg: 'Delete one Article' })
+     // Récupérer le paramêtre d'une route
+     const routeParam = req.params.id;
+
+     // Supprimer des données SQL
+     connexion.query(`DELETE FROM post WHERE _id = ${routeParam}`, (error, results, fields) => {
+         if (error) {
+             res.json({ msg: 'Error delete', err: error })
+         }
+         else{
+             res.json({ msg: 'Delete', data: results })
+         }
+     });
 });
 //
 
